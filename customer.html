@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고객센터 | 영일엔지니어링㈜</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/common.js"></script>
+  <script defer src="assets/animate.js"></script>
+  <script>window.BOARD_API = "/api/notices";</script>
+  <script defer src="assets/notice.js"></script>
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <a class="logo" href="index.html">영일엔지니어링㈜</a>
+    <nav>
+      <a href="about.html">회사소개</a>
+      <a href="business.html">사업소개</a>
+      <a href="recruit.html">인재채용</a>
+      <a href="customer.html">고객센터</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-banner">
+  <div class="container">
+    <p class="breadcrumb">고객센터 <span>›</span> 공지사항</p>
+    <h1>고객센터</h1>
+    <p>끊임없는 혁신과 변화로 세계 스마트 팩토리를 선도하는 영일엔지니어링㈜</p>
+  </div>
+</section>
+
+<main class="container section" id="boardWrap">
+  <div class="card">
+    <div class="flex between" style="margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <h2 style="margin:0;">공지사항</h2>
+      <div class="flex" id="adminIdWrap">
+        <input id="adminId" placeholder="관리자 ID" style="width:120px;margin:0;">
+        <input id="adminPw" type="password" placeholder="비밀번호" style="width:120px;margin:0;">
+        <button class="btn" id="loginBtn">로그인</button>
+      </div>
+      <button class="btn subtle hidden" id="logoutBtn">로그아웃</button>
+    </div>
+    <div id="adminTools" class="hidden flex" style="margin-bottom:10px;gap:8px;">
+      <button class="btn" id="newBtn">글쓰기</button>
+      <button class="btn subtle" id="deleteSelectedBtn">선택 삭제</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th id="selectHead" class="hidden" style="width:40px;">선택</th>
+          <th style="width:60px;">번호</th>
+          <th>제목</th>
+          <th style="width:100px;">작성자</th>
+          <th style="width:110px;">작성일</th>
+        </tr>
+      </thead>
+      <tbody id="boardBody"></tbody>
+    </table>
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <div class="card hidden" id="editorCard" style="margin-top:16px;">
+    <h2 id="editorTitle">글 작성</h2>
+    <input id="itemTitle" placeholder="제목">
+    <textarea id="itemContent" rows="8" placeholder="내용"></textarea>
+    <div class="flex">
+      <button class="btn" id="saveBtn">저장</button>
+      <button class="btn subtle" id="cancelBtn">취소</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <div class="footer-logo">영일엔지니어링㈜</div>
+      <p style="margin:4px 0 0;font-size:13px;">대구광역시 달성군 다사읍 세천로 8길 40 (세천리) 성서5차산업단지 내</p>
+      <p style="margin:2px 0 0;font-size:13px;">Tel : 053-588-1741 &nbsp;|&nbsp; Fax : 053-588-1743 &nbsp;|&nbsp; sales@yieng.co.kr</p>
+      <p class="footer-copy">© Young IL Engineering Co., Ltd. All rights reserved.</p>
+    </div>
+    <div class="footer-nav">
+      <a href="about.html">회사소개</a>
+      <a href="business.html">사업소개</a>
+      <a href="recruit.html">인재채용</a>
+      <a href="customer.html">고객센터</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

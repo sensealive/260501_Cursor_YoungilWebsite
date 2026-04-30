@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | 영일엔지니어링㈜</title>
+  <link rel="stylesheet" href="assets/styles.css">
+  <script defer src="assets/common.js"></script>
+  <script defer src="assets/animate.js"></script>
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <a class="logo" href="index.html">영일엔지니어링㈜</a>
+    <nav>
+      <a href="about.html">회사소개</a>
+      <a href="business.html">사업소개</a>
+      <a href="recruit.html">인재채용</a>
+      <a href="customer.html">고객센터</a>
+    </nav>
+  </div>
+</header>
+
+<section class="page-banner">
+  <div class="container">
+    <p class="breadcrumb">고객센터 <span>›</span> Contact Us</p>
+    <h1>Contact Us</h1>
+    <p>문의를 남겨주시면 성심성의껏 답변드리겠습니다.</p>
+  </div>
+</section>
+
+<main class="container section">
+  <div class="card fade-up" style="max-width:680px;">
+    <h2>문의하기</h2>
+    <p style="color:var(--muted);margin-bottom:20px;">아래 내용을 작성 후 등록해 주세요. 빠른 시일 내에 답변 드리겠습니다.</p>
+    <label style="font-weight:600;font-size:14px;">작성자 <span style="color:#c00;">*</span></label>
+    <input id="contactName" placeholder="이름을 입력하세요">
+    <label style="font-weight:600;font-size:14px;">E-Mail <span style="color:#c00;">*</span></label>
+    <input id="contactEmail" type="email" placeholder="이메일 주소를 입력하세요">
+    <label style="font-weight:600;font-size:14px;">연락처</label>
+    <input id="contactPhone" placeholder="연락처를 입력하세요 (예: 010-1234-5678)">
+    <label style="font-weight:600;font-size:14px;">제목 <span style="color:#c00;">*</span></label>
+    <input id="contactSubject" placeholder="제목을 입력하세요">
+    <label style="font-weight:600;font-size:14px;">문의 내용 <span style="color:#c00;">*</span></label>
+    <textarea id="contactContent" rows="7" placeholder="문의 내용을 입력하세요"></textarea>
+    <div class="flex" style="justify-content:flex-end;gap:10px;margin-top:4px;">
+      <button class="btn" onclick="submitContact()">등록</button>
+      <button class="btn subtle" onclick="resetForm()">초기화</button>
+    </div>
+    <div id="contactMsg" style="margin-top:12px;"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <div class="footer-logo">영일엔지니어링㈜</div>
+      <p style="margin:4px 0 0;font-size:13px;">대구광역시 달성군 다사읍 세천로 8길 40 (세천리) 성서5차산업단지 내</p>
+      <p style="margin:2px 0 0;font-size:13px;">Tel : 053-588-1741 &nbsp;|&nbsp; Fax : 053-588-1743 &nbsp;|&nbsp; sales@yieng.co.kr</p>
+      <p class="footer-copy">© Young IL Engineering Co., Ltd. All rights reserved.</p>
+    </div>
+    <div class="footer-nav">
+      <a href="about.html">회사소개</a>
+      <a href="business.html">사업소개</a>
+      <a href="recruit.html">인재채용</a>
+      <a href="customer.html">고객센터</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function submitContact() {
+  const name = document.getElementById("contactName").value.trim();
+  const email = document.getElementById("contactEmail").value.trim();
+  const subject = document.getElementById("contactSubject").value.trim();
+  const content = document.getElementById("contactContent").value.trim();
+  const msg = document.getElementById("contactMsg");
+  if (!name || !email || !subject || !content) {
+    msg.innerHTML = '<div class="alert warn">⚠️ 필수 항목(작성자, E-Mail, 제목, 문의 내용)을 입력해 주세요.</div>';
+    return;
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    msg.innerHTML = '<div class="alert warn">⚠️ 올바른 이메일 주소를 입력해 주세요.</div>';
+    return;
+  }
+  msg.innerHTML = '<div class="alert info">✅ 문의가 접수되었습니다. 빠른 시일 내에 답변 드리겠습니다.</div>';
+  document.getElementById("contactName").value = "";
+  document.getElementById("contactEmail").value = "";
+  document.getElementById("contactPhone").value = "";
+  document.getElementById("contactSubject").value = "";
+  document.getElementById("contactContent").value = "";
+}
+function resetForm() {
+  ["contactName","contactEmail","contactPhone","contactSubject","contactContent"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+  document.getElementById("contactMsg").innerHTML = "";
+}
+</script>
+</body>
+</html>
