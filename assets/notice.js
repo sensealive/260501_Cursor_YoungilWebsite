@@ -1,20 +1,17 @@
-// Generic board module used by notice.html (notices API) and media.html (media API).
-// Local mode uses server.js. GitHub Pages mode commits data/*.json through GitHub's Contents API.
+// Generic board module used by notice.html and media.html.
+// Local server mode uses server.js. Static GitHub Pages mode stores edits in this browser.
 const _BASE = location.protocol === "file:" ? "http://localhost:3000" : "";
 const BOARD_API_PATH = window.BOARD_API || "/api/notices";
 const BOARD_API = _BASE + BOARD_API_PATH;
 const STATIC_BOARD_FILE = BOARD_API_PATH.includes("/api/media") ? "data/media.json" : "data/notices.json";
-const GITHUB_BOARD = {
-  owner: "sensealive",
-  repo: "260501_Cursor_YoungilWebsite",
-  branch: "main",
-  ...(window.GITHUB_BOARD || {})
-};
-const IS_GITHUB_PAGES = location.hostname.toLowerCase().endsWith("github.io");
+const STORAGE_KEY = `youngil-board:${STATIC_BOARD_FILE}`;
+const AUTH_KEY = `youngil-board-auth:${STATIC_BOARD_FILE}`;
+const STATIC_MODE = location.hostname.toLowerCase().endsWith("github.io");
+const ADMIN_ID = "admin";
+const ADMIN_PASSWORD = "1741";
 
 let page = 1;
-let token = localStorage.getItem("adminToken") || "";
-let adminName = localStorage.getItem("boardAdminName") || "";
+let token = localStorage.getItem(AUTH_KEY) || "";
 let editingId = null;
 
 const qs = (s) => document.querySelector(s);
@@ -29,80 +26,22 @@ async function api(url, options = {}) {
   return data;
 }
 
-function githubHeaders(includeJson = false) {
-  const headers = {
-    Accept: "application/vnd.github+json"
-  };
-  if (includeJson) headers["Content-Type"] = "application/json";
-  if (token) headers.Authorization = `Bearer ${token}`;
-  return headers;
-}
-
-function githubContentUrl() {
-  const path = encodeURI(STATIC_BOARD_FILE);
-  return `https://api.github.com/repos/${GITHUB_BOARD.owner}/${GITHUB_BOARD.repo}/contents/${path}`;
-}
-
-function decodeBase64Unicode(value) {
-  const binary = atob(value.replace(/\n/g, ""));
-  const bytes = Uint8Array.from(binary, (ch) => ch.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-}
-
-function encodeBase64Unicode(value) {
-  const bytes = new TextEncoder().encode(value);
-  let binary = "";
-  bytes.forEach((byte) => { binary += String.fromCharCode(byte); });
-  return btoa(binary);
-}
-
-async function githubLoadBoardFile() {
-  const url = `${githubContentUrl()}?ref=${encodeURIComponent(GITHUB_BOARD.branch)}`;
-  const res = await fetch(url, { headers: githubHeaders() });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || "GitHub 데이터를 불러오지 못했습니다.");
-  return {
-    sha: data.sha,
-    items: JSON.parse(decodeBase64Unicode(data.content || "W10="))
-  };
-}
-
-async function githubSaveBoardFile(items, message) {
-  const current = await githubLoadBoardFile();
-  const body = {
-    message,
-    content: encodeBase64Unicode(`${JSON.stringify(items, null, 2)}\n`),
-    sha: current.sha,
-    branch: GITHUB_BOARD.branch
-  };
-  const res = await fetch(githubContentUrl(), {
-    method: "PUT",
-    headers: githubHeaders(true),
-    body: JSON.stringify(body)
-  });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || "GitHub 저장에 실패했습니다.");
-  return data;
-}
-
-async function githubVerifyToken() {
-  const res = await fetch("https://api.github.com/user", { headers: githubHeaders() });
-  const data = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(data.message || "GitHub 토큰을 확인하지 못했습니다.");
-  return data;
-}
-
-async function loadStaticBoard() {
-  if (IS_GITHUB_PAGES) {
-    try {
-      return (await githubLoadBoardFile()).items;
-    } catch {
-      // Public Pages can still serve the last built JSON file even when the API is unavailable.
-    }
-  }
+async function loadSeedItems() {
   const res = await fetch(STATIC_BOARD_FILE, { cache: "no-store" });
   if (!res.ok) throw new Error("게시글 데이터를 불러오지 못했습니다.");
   return await res.json();
+}
+
+async function loadStaticItems() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) return JSON.parse(saved);
+  const items = await loadSeedItems();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  return items;
+}
+
+function saveStaticItems(items) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
 function paginateItems(items, currentPage, pageSize) {
@@ -120,50 +59,48 @@ function paginateItems(items, currentPage, pageSize) {
 }
 
 async function loadBoardData() {
-  if (IS_GITHUB_PAGES) {
-    const items = await loadStaticBoard();
-    return paginateItems(items, page, 10);
+  if (STATIC_MODE) {
+    return paginateItems(await loadStaticItems(), page, 10);
   }
+
   try {
     return await api(`${BOARD_API}?page=${page}&pageSize=10`);
   } catch {
-    const items = await loadStaticBoard();
-    return paginateItems(items, page, 10);
+    return paginateItems(await loadStaticItems(), page, 10);
   }
 }
 
 async function loadBoardItem(id) {
-  if (IS_GITHUB_PAGES) {
-    const items = await loadStaticBoard();
-    const item = items.find((n) => String(n.id) === String(id));
-    if (!item) throw new Error("게시글을 찾을 수 없습니다.");
-    return item;
+  if (!STATIC_MODE) {
+    try {
+      return await api(`${BOARD_API}/${id}`);
+    } catch {
+      // Fall back to static data below.
+    }
   }
-  try {
-    return await api(`${BOARD_API}/${id}`);
-  } catch {
-    const items = await loadStaticBoard();
-    const item = items.find((n) => String(n.id) === String(id));
-    if (!item) throw new Error("게시글을 찾을 수 없습니다.");
-    return item;
-  }
+
+  const items = await loadStaticItems();
+  const item = items.find((n) => String(n.id) === String(id));
+  if (!item) throw new Error("게시글을 찾을 수 없습니다.");
+  return item;
 }
 
 async function verifyToken() {
   if (!token) return;
-  try {
-    if (IS_GITHUB_PAGES) {
-      const user = await githubVerifyToken();
-      if (!adminName) adminName = user.login || "admin";
-      localStorage.setItem("boardAdminName", adminName);
-    } else {
-      await api("/api/me");
+
+  if (STATIC_MODE) {
+    if (token !== "static-admin") {
+      token = "";
+      localStorage.removeItem(AUTH_KEY);
     }
+    return;
+  }
+
+  try {
+    await api("/api/me");
   } catch {
     token = "";
-    adminName = "";
-    localStorage.removeItem("adminToken");
-    localStorage.removeItem("boardAdminName");
+    localStorage.removeItem(AUTH_KEY);
   }
 }
 
@@ -180,6 +117,7 @@ async function loadBoard() {
     const data = await loadBoardData();
     const body = qs("#boardBody");
     body.innerHTML = "";
+
     if (data.items.length === 0) {
       body.innerHTML = `<tr><td colspan="5" style="text-align:center;padding:24px;color:#999;">등록된 자료가 없습니다.</td></tr>`;
     } else {
@@ -194,12 +132,13 @@ async function loadBoard() {
         body.appendChild(tr);
       });
     }
+
     body.querySelectorAll(".titleLink").forEach((a) => a.addEventListener("click", onViewItem));
     body.querySelectorAll(".check-col").forEach((td) => {
       if (token) td.classList.remove("hidden");
     });
     renderPagination(data.totalPages);
-  } catch (e) {
+  } catch {
     const body = qs("#boardBody");
     if (body) body.innerHTML = `<tr><td colspan="5" style="color:#c00;padding:16px;">게시글 데이터를 불러오지 못했습니다.</td></tr>`;
   }
@@ -232,7 +171,9 @@ async function onViewItem(e) {
     if (qs("#saveBtn")) qs("#saveBtn").classList.toggle("hidden", !token);
     editingId = Number(id);
     qs("#editorCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
-  } catch (e) { alert(e.message); }
+  } catch (e) {
+    alert(e.message);
+  }
 }
 
 async function login() {
@@ -240,12 +181,12 @@ async function login() {
   const password = qs("#adminPw").value.trim();
   if (!id || !password) { alert("아이디와 비밀번호를 입력해 주세요."); return; }
 
-  if (IS_GITHUB_PAGES) {
-    token = password;
-    const user = await githubVerifyToken();
-    adminName = id || user.login || "admin";
-    localStorage.setItem("adminToken", token);
-    localStorage.setItem("boardAdminName", adminName);
+  if (STATIC_MODE) {
+    if (id !== ADMIN_ID || password !== ADMIN_PASSWORD) {
+      throw new Error("아이디 또는 비밀번호가 올바르지 않습니다.");
+    }
+    token = "static-admin";
+    localStorage.setItem(AUTH_KEY, token);
     toggleAdminUI(true);
     await loadBoard();
     return;
@@ -253,21 +194,17 @@ async function login() {
 
   const result = await api("/api/login", { method: "POST", body: JSON.stringify({ id, password }) });
   token = result.token;
-  adminName = id;
-  localStorage.setItem("adminToken", token);
-  localStorage.setItem("boardAdminName", adminName);
+  localStorage.setItem(AUTH_KEY, token);
   toggleAdminUI(true);
   await loadBoard();
 }
 
 async function logout() {
-  if (!IS_GITHUB_PAGES) {
+  if (!STATIC_MODE) {
     try { await api("/api/logout", { method: "POST" }); } catch {}
   }
   token = "";
-  adminName = "";
-  localStorage.removeItem("adminToken");
-  localStorage.removeItem("boardAdminName");
+  localStorage.removeItem(AUTH_KEY);
   toggleAdminUI(false);
   qs("#editorCard")?.classList.add("hidden");
   loadBoard();
@@ -295,18 +232,17 @@ async function saveItem() {
   const content = qs("#itemContent").value.trim();
   if (!title || !content) { alert("제목과 내용을 입력해 주세요."); return; }
 
-  if (IS_GITHUB_PAGES) {
-    const current = await githubLoadBoardFile();
-    const items = current.items;
+  if (STATIC_MODE) {
+    const items = await loadStaticItems();
     if (editingId) {
       const idx = items.findIndex((n) => Number(n.id) === Number(editingId));
       if (idx < 0) throw new Error("게시글을 찾을 수 없습니다.");
       items[idx] = { ...items[idx], title, content };
     } else {
       const maxId = items.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0);
-      items.push({ id: maxId + 1, title, author: adminName || "admin", date: todayText(), content });
+      items.push({ id: maxId + 1, title, author: ADMIN_ID, date: todayText(), content });
     }
-    await githubSaveBoardFile(items, `${STATIC_BOARD_FILE} update`);
+    saveStaticItems(items);
   } else if (editingId) {
     await api(`${BOARD_API}/${editingId}`, { method: "PUT", body: JSON.stringify({ title, content }) });
   } else {
@@ -323,10 +259,9 @@ async function deleteSelected() {
   if (!ids.length) { alert("삭제할 항목을 선택해 주세요."); return; }
   if (!confirm(`선택한 ${ids.length}개 항목을 삭제하시겠습니까?`)) return;
 
-  if (IS_GITHUB_PAGES) {
-    const current = await githubLoadBoardFile();
-    const filtered = current.items.filter((n) => !ids.includes(Number(n.id)));
-    await githubSaveBoardFile(filtered, `${STATIC_BOARD_FILE} delete`);
+  if (STATIC_MODE) {
+    const items = await loadStaticItems();
+    saveStaticItems(items.filter((n) => !ids.includes(Number(n.id))));
   } else {
     await api(BOARD_API, { method: "DELETE", body: JSON.stringify({ ids }) });
   }
@@ -334,10 +269,8 @@ async function deleteSelected() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-  if (IS_GITHUB_PAGES) {
-    if (qs("#adminId")) qs("#adminId").placeholder = "작성자명";
-    if (qs("#adminPw")) qs("#adminPw").placeholder = "GitHub 토큰";
-  }
+  if (qs("#adminId")) qs("#adminId").placeholder = "관리자 ID";
+  if (qs("#adminPw")) qs("#adminPw").placeholder = "비밀번호";
 
   await verifyToken();
   toggleAdminUI(!!token);
