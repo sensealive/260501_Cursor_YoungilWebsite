@@ -6,7 +6,8 @@ const BOARD_API = _BASE + BOARD_API_PATH;
 const STATIC_BOARD_FILE = BOARD_API_PATH.includes("/api/media") ? "data/media.json" : "data/notices.json";
 const STORAGE_KEY = `youngil-board:${STATIC_BOARD_FILE}`;
 const AUTH_KEY = `youngil-board-auth:${STATIC_BOARD_FILE}`;
-const STATIC_MODE = location.hostname.toLowerCase().endsWith("github.io");
+const IS_NODE_SERVER = ["localhost", "127.0.0.1"].includes(location.hostname) && location.port === "3000";
+const STATIC_MODE = !IS_NODE_SERVER;
 const ADMIN_ID = "admin";
 const ADMIN_PASSWORD = "1741";
 
