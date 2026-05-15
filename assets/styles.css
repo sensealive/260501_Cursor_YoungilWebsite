@@ -47,6 +47,11 @@ header {
   transition: opacity .2s;
 }
 .logo:hover { opacity: .8; }
+.site-logo-img {
+  display: block;
+  width: 150px;
+  height: auto;
+}
 nav { display: flex; gap: 36px; font-weight: 700; font-size: 15px; color: #333; }
 nav > a { position: relative; padding: 4px 0; transition: color .2s; }
 nav > a::after {

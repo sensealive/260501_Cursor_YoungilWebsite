@@ -58,24 +58,13 @@ const menuMap = [
   }
 ];
 
-// ── Logo SVG ─────────────────────────────────────
-const LOGO_SVG = `<svg width="158" height="48" viewBox="0 0 158 48" xmlns="http://www.w3.org/2000/svg">
-  <g transform="translate(2,4)">
-    <!-- Y shape: left stroke, right stroke, vertical stem -->
-    <line x1="6" y1="2" x2="17" y2="16" stroke="var(--primary)" stroke-width="3.5" stroke-linecap="round"/>
-    <line x1="28" y1="2" x2="17" y2="16" stroke="#e92229" stroke-width="3.5" stroke-linecap="round"/>
-    <line x1="17" y1="16" x2="17" y2="32" stroke="var(--primary)" stroke-width="3.5" stroke-linecap="round"/>
-    <!-- arc above Y -->
-    <path d="M3,9 Q17,-4 31,9" stroke="#e92229" stroke-width="2" fill="none" stroke-linecap="round"/>
-  </g>
-  <text x="44" y="28" font-family="'Arial Black',Arial,sans-serif" font-weight="900" font-size="17" fill="var(--primary)" letter-spacing="-0.5">YOUNG IL</text>
-  <text x="44" y="42" font-family="Arial,sans-serif" font-size="8.5" fill="#e92229" letter-spacing="1.5">CREATIVE INNOVATION</text>
-</svg>`;
+// ── Logo ─────────────────────────────────────────
+const LOGO_HTML = `<img class="site-logo-img" src="assets/logo.png" alt="YOUNG IL CREATIVE INNOVATION">`;
 
 // ── Build logo ────────────────────────────────────
 function buildLogo() {
   const logoEl = document.querySelector("header .logo");
-  if (logoEl) logoEl.innerHTML = LOGO_SVG;
+  if (logoEl) logoEl.innerHTML = LOGO_HTML;
 }
 
 // ── Build dropdown nav ────────────────────────────
