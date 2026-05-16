@@ -47,3 +47,39 @@
 - 원격 기준: `https://github.com/sensealive/<현재프로젝트명>`
 - 로컬 기준 경로: `D:\programming\Cursor\Cusor_Project`
 - 해당 로컬 경로로 최신 변경사항을 pull 합니다.
+
+## 요일별 사이트 테마
+
+- 테마 적용 위치: `assets/common.js`
+- 적용 함수: `applyDayTheme()`
+- 기준: JavaScript `new Date().getDay()` 값
+  - `0`: 일요일
+  - `1`: 월요일
+  - `2`: 화요일
+  - `3`: 수요일
+  - `4`: 목요일
+  - `5`: 금요일
+  - `6`: 토요일
+- 현재 요일별로 바뀌는 CSS 변수:
+  - `--primary`
+  - `--bg`
+  - `--text`
+  - `--primary-soft`
+- `--accent`는 요일별 테마에서 변경하지 않으며, 기본값 `#e92229`를 유지한다.
+
+| 요일 | primary | 배경(bg) | 텍스트(text) | soft |
+|---|---|---|---|---|
+| 월요일 | `#2463eb` 파랑 | `#eef4ff` | `#13233e` | `#dce8ff` |
+| 화요일 | `#7b3fe4` 보라 | `#f4efff` | `#231241` | `#ecdcff` |
+| 수요일 | `#0a7ca8` 청록/블루 | `#eaf8ff` | `#0b2a36` | `#d2f2ff` |
+| 목요일 | `#c49000` 골드 | `#fffae5` | `#3f3200` | `#fff2c2` |
+| 금요일 | `#d96a10` 오렌지 | `#fff3ea` | `#3f2108` | `#ffe2c8` |
+| 토요일 | `#7a8499` 그레이 | `#f3f4f7` | `#1f2531` | `#e4e6ec` |
+| 일요일 | `#c8262d` 레드 | `#ffecef` | `#3b0b0f` | `#ffd5d8` |
+
+## 메인 히어로 배경 이미지
+
+- 현재 메인 히어로 배경 이미지: `assets/yieng/hero-smartfactory-robot.png`
+- 적용 위치: `assets/styles.css`의 `.hero` 배경
+- `index.html`의 `heroCanvas`는 점/불빛 애니메이션용 캔버스이므로 유지한다.
+- 배경 이미지를 교체하거나 보정할 때도 `heroCanvas`는 삭제하지 않는다.

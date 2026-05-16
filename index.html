@@ -41,17 +41,60 @@
     <div class="container">
       <p class="section-sub fade-up">인간의 삶을 풍요롭게 하는 세계 최고 수준의 스마트팩토리 회사 영일엔지니어링㈜입니다.</p>
       <div class="grid-3">
-        <a class="item fade-up delay-1" href="about.html">
+        <a class="image-card fade-up delay-1" href="about.html">
+          <img src="assets/yieng/about-img01.jpg" alt="영일엔지니어링 CEO 인사말 이미지">
+          <div class="image-card-body">
           <h3>About us</h3>
           <p>CEO 인사말, 기업문화, CI, 연혁, 조직도, 찾아오시는길</p>
+          </div>
         </a>
-        <a class="item fade-up delay-2" href="business.html">
+        <a class="image-card fade-up delay-2" href="business.html">
+          <img src="assets/yieng/business-img04.jpg" alt="전동컴프레서 자동화 조립라인">
+          <div class="image-card-body">
           <h3>Business Introduction</h3>
           <p>영일엔지니어링㈜은 품질 개선, 품질 향상의 제반 기술적 문제에 대한 노력과 연구를 지속합니다.</p>
+          </div>
         </a>
-        <a class="item fade-up delay-3" href="recruit.html">
+        <a class="image-card fade-up delay-3" href="recruit.html">
+          <img src="assets/yieng/about-img03.jpg" alt="영일엔지니어링 성장 이미지">
+          <div class="image-card-body">
           <h3>Recruitment</h3>
           <p>변화를 이끄는 당신이 영일엔지니어링㈜의 인재입니다.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature-band">
+    <div class="container">
+      <p class="section-title fade-up">Smart Factory Engineering</p>
+      <p class="section-sub fade-up">자동차 부품, 전동컴프레서, 조향장치, 2차전지 부품 조립·검사설비를 Turnkey 방식으로 설계하고 제작합니다.</p>
+      <div class="stats-strip fade-up">
+        <div class="stat-cell"><strong>FA</strong><span>공장자동화 시스템 및 전용기 제작</span></div>
+        <div class="stat-cell"><strong>EV</strong><span>전동컴프레서와 2차전지 부품 조립라인</span></div>
+        <div class="stat-cell"><strong>Global</strong><span>브라질, 프랑스, 중국 등 해외 제조라인 구축</span></div>
+        <div class="stat-cell"><strong>ISO</strong><span>품질·환경·안전보건 경영시스템 기반 운영</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="section-title fade-up">Automation Portfolio</p>
+      <p class="section-sub fade-up">원본 사이트의 제작실적 이미지를 기반으로 주요 자동화 설비를 한눈에 볼 수 있게 구성했습니다.</p>
+      <div class="machine-grid">
+        <a class="machine-card fade-up delay-1" href="business-status.html">
+          <img src="assets/yieng/business-img05.jpg" alt="파워스티어링 조립라인">
+          <div><h3>Power Steering</h3><p>EPS 조립 및 검사설비 라인</p></div>
+        </a>
+        <a class="machine-card fade-up delay-2" href="business-field.html">
+          <img src="assets/yieng/business02-img03.jpg" alt="2차전지 부품 조립설비">
+          <div><h3>Battery Components</h3><p>2차전지 부품 조립·검사 설비</p></div>
+        </a>
+        <a class="machine-card fade-up delay-3" href="business-field.html">
+          <img src="assets/yieng/business02-img23.jpg" alt="브레이크 시스템 조립라인">
+          <div><h3>Brake System</h3><p>ABS 및 캘리퍼 조립라인</p></div>
         </a>
       </div>
     </div>
@@ -71,6 +114,22 @@
         <table>
           <thead><tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일</th></tr></thead>
           <tbody id="homeNoticeBody">
+            <tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">불러오는 중...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex between" style="margin:36px 0 20px;">
+        <div>
+          <p class="section-title fade-up">Media</p>
+          <p class="section-sub" style="margin:0;">영일엔지니어링㈜의 최근 언론보도 소식을 전해드립니다.</p>
+        </div>
+        <a href="media.html" class="btn subtle fade-up" style="white-space:nowrap;">전체보기</a>
+      </div>
+      <div class="card fade-up">
+        <table>
+          <thead><tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일</th></tr></thead>
+          <tbody id="homeMediaBody">
             <tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">불러오는 중...</td></tr>
           </tbody>
         </table>
@@ -100,18 +159,81 @@
 
 <script>
 const _indexBase = location.protocol === "file:" ? "http://localhost:3000" : "";
-fetch(_indexBase + "/api/notices?page=1&pageSize=5")
-  .then(r => r.json())
-  .then(d => {
-    const body = document.getElementById("homeNoticeBody");
-    body.innerHTML = d.items.length
-      ? d.items.map(n => `<tr><td>${n.id}</td><td><a href="notice.html" style="color:var(--primary)">${n.title}</a></td><td>${n.author}</td><td>${n.date}</td></tr>`).join("")
-      : `<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">공지사항이 없습니다.</td></tr>`;
-  })
-  .catch(() => {
-    document.getElementById("homeNoticeBody").innerHTML =
-      `<tr><td colspan="4" style="text-align:center;padding:16px;color:#999;"><a href="notice.html">공지사항 바로가기</a></td></tr>`;
-  });
+const _isLocalHost = ["localhost", "127.0.0.1"].includes(location.hostname);
+
+async function loadHomeBoard({ apiPath, dataFile, bodyId, link, emptyText }) {
+  const body = document.getElementById(bodyId);
+  try {
+    let items = [];
+
+    if (_isLocalHost || location.protocol === "file:") {
+      try {
+        const res = await fetch(`${_indexBase}${apiPath}?page=1&pageSize=5`, { cache: "no-store" });
+        if (!res.ok) throw new Error("API request failed");
+        const data = await res.json();
+        items = data.items || [];
+      } catch {
+        items = await loadStaticHomeBoard(dataFile);
+      }
+    } else {
+      items = await loadStaticHomeBoard(dataFile);
+    }
+
+    const recentItems = [...items]
+      .sort((a, b) => Number(b.id) - Number(a.id))
+      .slice(0, 5);
+
+    body.innerHTML = recentItems.length
+      ? recentItems.map((item) => `
+          <tr>
+            <td>${item.id}</td>
+            <td><a href="${link}" style="color:var(--primary)">${escapeHtml(item.title || "")}</a></td>
+            <td>${escapeHtml(item.author || "")}</td>
+            <td>${escapeHtml(item.date || "")}</td>
+          </tr>`).join("")
+      : `<tr><td colspan="4" style="text-align:center;padding:20px;color:#999;">${emptyText}</td></tr>`;
+  } catch {
+    body.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:16px;color:#999;"><a href="${link}">게시판 바로가기</a></td></tr>`;
+  }
+}
+
+async function loadStaticHomeBoard(dataFile) {
+  const storageKey = `youngil-board:${dataFile}`;
+  const saved = localStorage.getItem(storageKey);
+  if (saved) return JSON.parse(saved);
+
+  const res = await fetch(dataFile, { cache: "no-store" });
+  if (!res.ok) throw new Error("Static board data request failed");
+  const items = await res.json();
+  localStorage.setItem(storageKey, JSON.stringify(items));
+  return items;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[char]));
+}
+
+loadHomeBoard({
+  apiPath: "/api/notices",
+  dataFile: "data/notices.json",
+  bodyId: "homeNoticeBody",
+  link: "notice.html",
+  emptyText: "공지사항이 없습니다."
+});
+
+loadHomeBoard({
+  apiPath: "/api/media",
+  dataFile: "data/media.json",
+  bodyId: "homeMediaBody",
+  link: "media.html",
+  emptyText: "언론보도 게시물이 없습니다."
+});
 </script>
 </body>
 </html>
