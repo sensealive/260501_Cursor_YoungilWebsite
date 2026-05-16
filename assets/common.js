@@ -1,12 +1,12 @@
 ﻿// ── Day theme ────────────────────────────────────
 const dayThemes = {
-  1: { primary: "#2463eb", bg: "#eef4ff", text: "#13233e", soft: "#dce8ff" },
-  2: { primary: "#7b3fe4", bg: "#f4efff", text: "#231241", soft: "#ecdcff" },
-  3: { primary: "#0a7ca8", bg: "#eaf8ff", text: "#0b2a36", soft: "#d2f2ff" },
-  4: { primary: "#c49000", bg: "#fffae5", text: "#3f3200", soft: "#fff2c2" },
-  5: { primary: "#d96a10", bg: "#fff3ea", text: "#3f2108", soft: "#ffe2c8" },
-  6: { primary: "#7a8499", bg: "#f3f4f7", text: "#1f2531", soft: "#e4e6ec" },
-  0: { primary: "#c8262d", bg: "#ffecef", text: "#3b0b0f", soft: "#ffd5d8" }
+  1: { primary: "#2463eb", bg: "#eef4ff", text: "#13233e", soft: "#dce8ff", tint: "rgba(36, 99, 235, .34)", tintStrong: "rgba(36, 99, 235, .68)" },
+  2: { primary: "#7b3fe4", bg: "#f4efff", text: "#231241", soft: "#ecdcff", tint: "rgba(123, 63, 228, .34)", tintStrong: "rgba(123, 63, 228, .68)" },
+  3: { primary: "#0a7ca8", bg: "#eaf8ff", text: "#0b2a36", soft: "#d2f2ff", tint: "rgba(10, 124, 168, .34)", tintStrong: "rgba(10, 124, 168, .68)" },
+  4: { primary: "#c49000", bg: "#fffae5", text: "#3f3200", soft: "#fff2c2", tint: "rgba(196, 144, 0, .32)", tintStrong: "rgba(196, 144, 0, .62)" },
+  5: { primary: "#d96a10", bg: "#fff3ea", text: "#3f2108", soft: "#ffe2c8", tint: "rgba(217, 106, 16, .32)", tintStrong: "rgba(217, 106, 16, .62)" },
+  6: { primary: "#7a8499", bg: "#f3f4f7", text: "#1f2531", soft: "#e4e6ec", tint: "rgba(122, 132, 153, .36)", tintStrong: "rgba(122, 132, 153, .70)" },
+  0: { primary: "#c8262d", bg: "#ffecef", text: "#3b0b0f", soft: "#ffd5d8", tint: "rgba(200, 38, 45, .32)", tintStrong: "rgba(200, 38, 45, .62)" }
 };
 
 function applyDayTheme() {
@@ -17,6 +17,8 @@ function applyDayTheme() {
   r.setProperty("--bg", t.bg);
   r.setProperty("--text", t.text);
   r.setProperty("--primary-soft", t.soft);
+  r.setProperty("--hero-tint", t.tint);
+  r.setProperty("--hero-tint-strong", t.tintStrong);
 }
 
 // ── Navigation menu map ───────────────────────────
