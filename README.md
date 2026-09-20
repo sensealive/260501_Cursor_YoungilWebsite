@@ -12,7 +12,7 @@
    - `node server.js`
 
 ## 프로젝트 운영 메모
-- 진행 현황은 `WORK_LOG.md`에 기록합니다.
-- 작업 항목은 `TODO.md`에서 관리합니다.
-- 이슈는 `BUGS.md`에 기록합니다.
-- 아키텍처/운영 결정 사항은 `DECISIONS.md`에 남깁니다.
+- 진행 현황은 `MDs/WORK_LOG.md`에 기록합니다.
+- 작업 항목은 `MDs/TODO.md`에서 관리합니다.
+- 이슈는 `MDs/BUGS.md`에 기록합니다.
+- 아키텍처/운영 결정 사항은 `MDs/DECISIONS.md`에 남깁니다.
