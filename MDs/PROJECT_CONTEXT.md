@@ -83,3 +83,11 @@
 - 적용 위치: `assets/styles.css`의 `.hero` 배경
 - `index.html`의 `heroCanvas`는 점/불빛 애니메이션용 캔버스이므로 유지한다.
 - 배경 이미지를 교체하거나 보정할 때도 `heroCanvas`는 삭제하지 않는다.
+
+## 관련 (Obsidian Vault)
+
+- [[../../02_Wiki/Youngil/Youngil|영일 사내 웹 도구 3형제]] — 공통 배포 표준과 공통 위험
+- [[../../02_Wiki/WebApps/WebApps|정적 웹앱]]
+- 자매 프로젝트: [[../260507_Youngil_BusinessTrip/PROJECT_CONTEXT|출장 관리]] · [[../Youngil_WebApps/PROJECT_CONTEXT|Youngil WebApps]]
+
+> 아래 링크는 Obsidian Vault(`HermesVault/03_Projects/`)에서 열 때 동작한다. GitHub에서는 일반 텍스트로 보인다.
